@@ -30,7 +30,7 @@ Pastikan Anda sudah menginstal:
 
 ### 2. Clone Repository
 ```bash
-git clone https://github.com/username/monitoring-rooms-v3.git
+git clone https://github.com/arnugrha/monitoring-rooms-unpam.git
 ```
 
 ### 3. Konfigurasi Database
