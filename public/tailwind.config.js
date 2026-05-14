@@ -1,0 +1,67 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: "class",
+  content: ["./*.html", "./src/**/*.{js,ts,jsx,tsx}", "../app/views/**/*.php", "./dist/js/interactive.js"],
+  theme: {
+    extend: {
+      colors: {
+        "surface-container-high": "#e7e8e9",
+        "outline-variant": "#c1c6d4",
+        "error-container": "#ffdad6",
+        "tertiary": "#775800",
+        "primary": "#005dac",
+        "surface-bright": "#f8f9fa",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#d3e2ed",
+        "tertiary-container": "#966f00",
+        "on-tertiary-fixed-variant": "#5c4300",
+        "inverse-on-surface": "#f0f1f2",
+        "tertiary-fixed": "#ffdfa0",
+        "on-secondary-container": "#56656e",
+        "surface-tint": "#005faf",
+        "on-secondary-fixed": "#0f1d25",
+        "surface-container-low": "#f3f4f5",
+        "on-error-container": "#93000a",
+        "secondary-fixed-dim": "#bac9d3",
+        "surface-container-highest": "#e1e3e4",
+        "outline": "#717783",
+        "on-primary-fixed-variant": "#004786",
+        "surface": "#f8f9fa",
+        "surface-variant": "#e1e3e4",
+        "secondary-fixed": "#d6e5ef",
+        "on-secondary-fixed-variant": "#3b4951",
+        "on-background": "#191c1d",
+        "secondary": "#526069",
+        "primary-container": "#1976d2",
+        "on-error": "#ffffff",
+        "on-surface-variant": "#414752",
+        "background": "#f8f9fa",
+        "tertiary-fixed-dim": "#f8bd2a",
+        "on-primary-container": "#fffdff",
+        "primary-fixed": "#d4e3ff",
+        "on-primary-fixed": "#001c3a",
+        "surface-container": "#edeeef",
+        "inverse-surface": "#2e3132",
+        "on-tertiary": "#ffffff",
+        "on-tertiary-fixed": "#261a00",
+        "surface-dim": "#d9dadb",
+        "on-primary": "#ffffff",
+        "on-tertiary-container": "#fffdff",
+        "error": "#ba1a1a",
+        "inverse-primary": "#a5c8ff",
+        "primary-fixed-dim": "#a5c8ff",
+        "on-surface": "#191c1d",
+        "surface-container-lowest": "#ffffff"
+      },
+      fontFamily: {
+        "headline": ["Manrope", "sans-serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["Inter", "sans-serif"]
+      }
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries')
+  ],
+}

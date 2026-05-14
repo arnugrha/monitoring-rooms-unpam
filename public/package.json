@@ -1,0 +1,17 @@
+{
+  "name": "montoring-rooms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./dist/css/output.css",
+    "watch": "tailwindcss -i ./src/input.css -o ./dist/css/output.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "latest",
+    "@tailwindcss/forms": "latest",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^3.4.19"
+  }
+}
