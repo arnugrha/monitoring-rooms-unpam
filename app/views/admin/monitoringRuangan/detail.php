@@ -15,6 +15,10 @@
                     <span class="material-symbols-outlined text-[18px]">print</span>
                     Cetak Laporan
                 </a>
+                <a href="<?= BASEURL; ?>MonitoringRuangan/tambah?preselected_kode_ruangan=<?= $data['ruangan']['kode_ruangan']; ?>" class="flex items-center gap-2 px-4 py-2 text-xs bg-primary text-white font-bold rounded-xl shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                    Tambah Barang
+                </a>
                 <a href="<?= BASEURL; ?>MonitoringRuangan/export/<?= $data['ruangan']['kode_ruangan']; ?>" class="flex items-center gap-2 px-4 py-2 text-xs bg-primary text-on-primary font-bold rounded-xl shadow-[0_4px_14px_rgba(0,93,172,0.3)] hover:scale-[1.02] active:scale-95 transition-all">
                     <span class="material-symbols-outlined text-[18px]">download</span>
                     Export Excel
@@ -25,7 +29,7 @@
         
 
         <!-- Table Section -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100">
+        <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 pb-2">
           <div class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h4 class="text-base md:text-lg font-extrabold text-on-surface font-headline">Daftar Inventaris</h4>
@@ -50,6 +54,9 @@
                   <th class="px-5 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
                     Rusak
                   </th>
+                  <th class="px-5 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-50">
@@ -60,7 +67,14 @@
                   <td class="px-5 py-4">
                     <div class="flex items-center gap-3">
                       <div>
-                        <p class="font-bold text-xs md:text-sm text-on-surface"><?= $barang['nama_barang']; ?></p>
+                        <?php if($barang['nama_kategori'] == 'Container' && !empty($barang['id_container'])): ?>
+                            <a href="<?= BASEURL; ?>MonitoringRuangan/detailContainer/<?= $barang['id_container']; ?>" class="text-primary hover:underline group-hover:text-primary transition-colors flex items-center gap-1 w-max">
+                                <p class="font-bold text-xs md:text-sm"><?= $barang['nama_barang']; ?></p>
+                                <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                            </a>
+                        <?php else: ?>
+                            <p class="font-bold text-xs md:text-sm text-on-surface"><?= $barang['nama_barang']; ?></p>
+                        <?php endif; ?>
                       </div>
                     </div>
                   </td>
@@ -71,42 +85,17 @@
                   <td class="px-5 py-4 text-center text-xs md:text-sm font-bold text-on-surface">
                     <span class="px-2 py-0.5 bg-red-50 text-error text-[10px] font-bold rounded-full"><?= $barang['kondisi_rusak']; ?></span>
                   </td>
+                  <td class="px-5 py-4">
+                    <div class="flex items-center justify-center">
+                      <a href="<?= BASEURL; ?>MonitoringRuangan/hapusBarang/<?= $data['ruangan']['kode_ruangan']; ?>/<?= $barang['id_barang']; ?>" class="p-1.5 text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Hapus Barang" onclick="return confirm('Apakah Anda yakin ingin menghapus barang <?= $barang['nama_barang']; ?> dari ruangan ini?')">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                      </a>
+                    </div>
+                  </td>
                 </tr>
                 <?php endforeach; ?>
               </tbody>
             </table>
-          </div>
-
-          <!-- Table Footer / Pagination -->
-          <div
-            class="p-5 md:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-50 bg-slate-50/30"
-          >
-            <p class="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-tight">
-              Menampilkan 1 - 3 dari 128 Ruangan
-            </p>
-            <div class="flex items-center gap-1.5">
-              <button class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors">
-                <span class="material-symbols-outlined text-lg">chevron_left</span>
-              </button>
-              <button
-                class="h-8 w-8 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-[10px] md:text-xs"
-              >
-                1
-              </button>
-              <button
-                class="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500 font-bold text-[10px] md:text-xs"
-              >
-                2
-              </button>
-              <button
-                class="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500 font-bold text-[10px] md:text-xs"
-              >
-                3
-              </button>
-              <button class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors">
-                <span class="material-symbols-outlined text-lg">chevron_right</span>
-              </button>
-            </div>
           </div>
         </div>
       </section>

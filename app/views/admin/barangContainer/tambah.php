@@ -25,11 +25,15 @@
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Pilih Container</label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-primary transition-colors">inventory_2</span>
-                        <select name="id_container" required
-                            class="w-full h-11 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-lg appearance-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-sm text-on-surface">
-                            <option value="" disabled selected>Pilih Unit Container</option>
+                        <?php if (!empty($data['preselected_container_id'])): ?>
+                            <input type="hidden" name="id_container" value="<?= $data['preselected_container_id']; ?>">
+                        <?php endif; ?>
+
+                        <select <?= !empty($data['preselected_container_id']) ? 'disabled' : 'name="id_container"'; ?> required
+                            class="w-full h-11 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-lg appearance-none focus:ring-2 focus:ring-primary/20 focus:bg-white disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed transition-all outline-none text-sm text-on-surface">
+                            <option value="" disabled <?= empty($data['preselected_container_id']) ? 'selected' : ''; ?>>Pilih Unit Container</option>
                             <?php foreach ($data['containers'] as $c) : ?>
-                                <option value="<?= $c['id_container']; ?>">
+                                <option value="<?= $c['id_container']; ?>" <?= (!empty($data['preselected_container_id']) && $data['preselected_container_id'] == $c['id_container']) ? 'selected' : ''; ?>>
                                     <?= $c['nama_container']; ?> - <?= $c['nama_ruangan']; ?> (<?= $c['kode_ruangan']; ?>)
                                 </option>
                             <?php endforeach; ?>

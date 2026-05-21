@@ -8,10 +8,10 @@
             <span class="text-primary">Edit Isi Container</span>
         </div>
         <h1 class="text-2xl md:text-3xl font-extrabold text-on-surface font-headline leading-tight">
-            Update Isi: <?= $data['container_info']['nama_barang']; ?>
+            Update Isi: <?= $data['container_info']['nama_container']; ?>
         </h1>
         <p class="text-slate-500 mt-2 text-sm md:text-base leading-relaxed">
-            Sesuaikan barang-barang yang tersimpan di dalam unit <?= $data['container_info']['nama_barang']; ?>.
+            Sesuaikan barang-barang yang tersimpan di dalam unit <?= $data['container_info']['nama_container']; ?>.
         </p>
     </div>
 
@@ -29,7 +29,7 @@
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">inventory_2</span>
                         <input type="text" readonly 
                             class="w-full h-11 pl-10 pr-4 bg-slate-100 border border-slate-200 rounded-lg text-sm text-slate-500 outline-none"
-                            value="<?= $data['container_info']['nama_barang']; ?> - <?= $data['container_info']['nama_ruangan']; ?> (<?= $data['container_info']['kode_ruangan']; ?>)">
+                            value="<?= $data['container_info']['nama_container']; ?> - <?= $data['container_info']['nama_ruangan']; ?> (<?= $data['container_info']['kode_ruangan']; ?>)">
                     </div>
                 </div>
 

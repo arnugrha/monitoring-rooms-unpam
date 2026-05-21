@@ -57,7 +57,11 @@
       
       if($id) {
         Session::setFlash('success', 'Container berhasil ditambahkan');
-        header('Location: ' . BASEURL . 'index.php?url=container/index');
+        if (isset($_POST['submit_action']) && $_POST['submit_action'] === 'save_and_add') {
+          header('Location: ' . BASEURL . 'index.php?url=BarangContainer/tambah/' . $id);
+        } else {
+          header('Location: ' . BASEURL . 'index.php?url=container/index');
+        }
         exit;
       } else {
         Session::setFlash('error', 'Gagal menambahkan container');

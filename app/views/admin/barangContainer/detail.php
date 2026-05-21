@@ -18,6 +18,10 @@
             </p>
         </div>
         <div class="flex gap-3">
+            <a href="<?= BASEURL; ?>BarangContainer/tambah/<?= $data['container_info']['id_container']; ?>" class="flex items-center gap-2 px-4 py-2 text-xs bg-primary text-white font-bold rounded-xl shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                Tambah Barang
+            </a>
             <a href="<?= BASEURL; ?>BarangContainer" class="flex items-center gap-2 px-4 py-2 text-xs bg-surface-container-lowest text-slate-500 font-bold rounded-xl shadow-sm border border-outline-variant/20 hover:bg-slate-50 transition-all">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                 Kembali

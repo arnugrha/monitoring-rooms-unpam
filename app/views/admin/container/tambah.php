@@ -81,11 +81,22 @@
                     Batal
                 </a>
                 <button 
-                    class="w-full sm:w-auto px-10 h-11 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-sm" 
+                    class="w-full sm:w-auto px-6 h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-sm" 
                     type="submit"
+                    name="submit_action"
+                    value="save"
                 >
-                    <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">save</span>
-                    Simpan Container
+                    <span class="material-symbols-outlined text-lg">save</span>
+                    Simpan Saja
+                </button>
+                <button 
+                    class="w-full sm:w-auto px-8 h-11 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-sm" 
+                    type="submit"
+                    name="submit_action"
+                    value="save_and_add"
+                >
+                    <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                    Simpan & Tambah Barang
                 </button>
             </div>
         </form>

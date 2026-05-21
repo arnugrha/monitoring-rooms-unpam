@@ -57,7 +57,7 @@ npm run build
 
 ### 6. Akses Website
 Buka browser Anda dan akses:
-`http://localhost/projects/montoring-rooms-v3/public/`
+`http://localhost/projects/montoring-rooms-v3/public/` // sesuaikan dengan tempat menyimpan websitenya 
 
 ## 👥 Akun Demo (Default)
 

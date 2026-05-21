@@ -85,10 +85,17 @@
                 $this->db->bind('kode', $kode_ruangan);
                 $this->db->bind('id_barang', $id_barang);
                 if (!$this->db->single()) {
-                    $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user) VALUES (:kode, :id_barang, :id_user)");
+                    $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user, qr_data) VALUES (:kode, :id_barang, :id_user, '')");
                     $this->db->bind('kode', $kode_ruangan);
                     $this->db->bind('id_barang', $id_barang);
                     $this->db->bind('id_user', $id_user);
+                    $this->db->execute();
+
+                    $id_container = $this->db->lastInsertId();
+                    $qr_url = BASEURL . "home/container/" . $id_container;
+                    $this->db->query("UPDATE container SET qr_data = :qr WHERE id_container = :id");
+                    $this->db->bind('qr', $qr_url);
+                    $this->db->bind('id', $id_container);
                     $this->db->execute();
                 }
             }
@@ -207,10 +214,17 @@
                 $this->db->bind('kode', $kode_ruangan);
                 $this->db->bind('id_barang', $id_barang);
                 if (!$this->db->single()) {
-                    $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user) VALUES (:kode, :id_barang, :id_user)");
+                    $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user, qr_data) VALUES (:kode, :id_barang, :id_user, '')");
                     $this->db->bind('kode', $kode_ruangan);
                     $this->db->bind('id_barang', $id_barang);
                     $this->db->bind('id_user', $id_user);
+                    $this->db->execute();
+
+                    $id_container = $this->db->lastInsertId();
+                    $qr_url = BASEURL . "home/container/" . $id_container;
+                    $this->db->query("UPDATE container SET qr_data = :qr WHERE id_container = :id");
+                    $this->db->bind('qr', $qr_url);
+                    $this->db->bind('id', $id_container);
                     $this->db->execute();
                 }
             }
@@ -250,8 +264,53 @@
 
         return $this->db->rowCount();
     }
+
+    public function hapusSatuBarangRuangan($kode_ruangan, $id_barang)
+    {
+        $this->db->query("DELETE FROM ruangan_barang WHERE kode_ruangan = :kode_ruangan AND id_barang = :id_barang");
+        $this->db->bind('kode_ruangan', $kode_ruangan);
+        $this->db->bind('id_barang', $id_barang);
+        $this->db->execute();
+
+        // Juga hapus dari master data container untuk ruangan dan barang ini jika ada
+        $this->db->query("DELETE FROM container WHERE kode_ruangan = :kode_ruangan AND id_barang = :id_barang");
+        $this->db->bind('kode_ruangan', $kode_ruangan);
+        $this->db->bind('id_barang', $id_barang);
+        $this->db->execute();
+
+        return $this->db->rowCount();
+    }
     public function importDataBarangCSV($kode_ruangan, $nama_barang, $total_barang, $kondisi_baik, $kondisi_rusak)
     {
+        // 0. Cek apakah ruangan sudah ada
+        $this->db->query("SELECT * FROM ruangan WHERE kode_ruangan = :kode_ruangan");
+        $this->db->bind('kode_ruangan', $kode_ruangan);
+        $ruangan = $this->db->single();
+
+        if (!$ruangan) {
+            // Buat ruangan baru
+            $nama_ruangan = "Ruang " . $kode_ruangan;
+            $lokasi = "Gedung Utama"; // Default
+            
+            $this->db->query("INSERT INTO ruangan (nama_ruangan, kode_ruangan, lokasi, qr_data, delete_at)
+                              VALUES (:nama_ruangan, :kode_ruangan, :lokasi, '', 1)");
+            $this->db->bind('nama_ruangan', $nama_ruangan);
+            $this->db->bind('kode_ruangan', $kode_ruangan);
+            $this->db->bind('lokasi', $lokasi);
+            $this->db->execute();
+            
+            $qr_data = BASEURL . 'home/index/' . $kode_ruangan;
+            $this->db->query("UPDATE ruangan SET qr_data = :qr_data WHERE kode_ruangan = :kode_ruangan");
+            $this->db->bind('qr_data', $qr_data);
+            $this->db->bind('kode_ruangan', $kode_ruangan);
+            $this->db->execute();
+        } elseif ($ruangan['delete_at'] == 0) {
+            // Jika ruangan di-softdelete, restore ruangan tersebut
+            $this->db->query("UPDATE ruangan SET delete_at = 1 WHERE kode_ruangan = :kode_ruangan");
+            $this->db->bind('kode_ruangan', $kode_ruangan);
+            $this->db->execute();
+        }
+
         // 1. Cari id_barang berdasarkan nama_barang
         $this->db->query("SELECT id_barang FROM barang WHERE nama_barang = :nama_barang");
         $this->db->bind('nama_barang', $nama_barang);
@@ -329,25 +388,25 @@
         $this->db->bind('id_barang', $id_barang);
         $kat = $this->db->single();
         
-        if ($kat && $kat['nama_kategori'] == 'Container') {
-            $this->db->query("SELECT id_container FROM container WHERE kode_ruangan = :kode AND id_barang = :id_barang");
-            $this->db->bind('kode', $kode_ruangan);
-            $this->db->bind('id_barang', $id_barang);
-            if (!$this->db->single()) {
-                $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user) VALUES (:kode, :id_barang, :id_user)");
+            if ($kat && $kat['nama_kategori'] == 'Container') {
+                $this->db->query("SELECT id_container FROM container WHERE kode_ruangan = :kode AND id_barang = :id_barang");
                 $this->db->bind('kode', $kode_ruangan);
                 $this->db->bind('id_barang', $id_barang);
-                $this->db->bind('id_user', $id_user);
-                $this->db->execute();
+                if (!$this->db->single()) {
+                    $this->db->query("INSERT INTO container (kode_ruangan, id_barang, id_user, qr_data) VALUES (:kode, :id_barang, :id_user, '')");
+                    $this->db->bind('kode', $kode_ruangan);
+                    $this->db->bind('id_barang', $id_barang);
+                    $this->db->bind('id_user', $id_user);
+                    $this->db->execute();
 
-                $id_container = $this->db->lastInsertId();
-                $qr_url = BASEURL . "home/container/" . $id_container;
-                $this->db->query("UPDATE container SET qr_data = :qr WHERE id_container = :id");
-                $this->db->bind('qr', $qr_url);
-                $this->db->bind('id', $id_container);
-                $this->db->execute();
+                    $id_container = $this->db->lastInsertId();
+                    $qr_url = BASEURL . "home/container/" . $id_container;
+                    $this->db->query("UPDATE container SET qr_data = :qr WHERE id_container = :id");
+                    $this->db->bind('qr', $qr_url);
+                    $this->db->bind('id', $id_container);
+                    $this->db->execute();
+                }
             }
-        }
         
         return 1;
     }

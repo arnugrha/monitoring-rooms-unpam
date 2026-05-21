@@ -20,6 +20,18 @@
             <form action="<?= BASEURL; ?>monitoringRuangan/simpan" method="POST" class="space-y-6">
                 <div class="grid grid-cols-1 gap-6">
                     <!-- Searchable Room Selection -->
+                    <?php
+                    $preselected_kode = $data['preselected_kode_ruangan'] ?? '';
+                    $preselected_nama = '';
+                    if (!empty($preselected_kode)) {
+                        foreach ($data['ruangan'] as $r) {
+                            if ($r['kode_ruangan'] === $preselected_kode) {
+                                $preselected_nama = $r['nama_ruangan'];
+                                break;
+                            }
+                        }
+                    }
+                    ?>
                     <div class="space-y-2">
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Pilih Ruangan</label>
                         <div class="relative custom-select-container" id="room-select-container">
@@ -30,13 +42,15 @@
                                     id="room-search"
                                     placeholder="Ketik/Cari Ruangan..."
                                     autocomplete="off"
-                                    class="w-full h-11 pl-10 pr-10 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-sm text-on-surface placeholder:text-slate-300"
+                                    value="<?= !empty($preselected_kode) ? "$preselected_nama ($preselected_kode)" : "" ?>"
+                                    <?= !empty($preselected_kode) ? "disabled" : "" ?>
+                                    class="w-full h-11 pl-10 pr-10 <?= !empty($preselected_kode) ? "bg-slate-100 cursor-not-allowed text-slate-500 pointer-events-none" : "bg-slate-50" ?> border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-sm text-on-surface placeholder:text-slate-300"
                                 >
-                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none transition-transform duration-300" id="room-arrow">expand_more</span>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none transition-transform duration-300" id="room-arrow"><?= !empty($preselected_kode) ? "lock" : "expand_more" ?></span>
                             </div>
                             
                             <!-- Hidden actual input for POST -->
-                            <input type="hidden" name="kode_ruangan" id="kode_ruangan" required>
+                            <input type="hidden" name="kode_ruangan" id="kode_ruangan" value="<?= $preselected_kode ?>" required>
 
                             <!-- Dropdown List -->
                             <div id="room-dropdown" class="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto hidden">

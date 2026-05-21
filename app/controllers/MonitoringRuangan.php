@@ -23,9 +23,16 @@
       $this->views('admin/templates/footer');
     }
 
-    public function tambah() {
+    public function tambah($preselected_kode_ruangan = null) {
       $data['judul'] = 'Tambah Data Barang';
       $data['ruangan'] = $this->models('Ruangan_model')->getAllRuangan();
+      
+      // Support both route parameter and query string parameter
+      if (empty($preselected_kode_ruangan) && isset($_GET['preselected_kode_ruangan'])) {
+        $preselected_kode_ruangan = $_GET['preselected_kode_ruangan'];
+      }
+      
+      $data['preselected_kode_ruangan'] = $preselected_kode_ruangan;
       $data['barang'] = $this->models('Barang_model')->getAllBarang();
       $data['kategori'] = $this->models('Barang_model')->getAllKategori();
       $this->views('admin/templates/header', $data);
@@ -60,6 +67,20 @@
       $this->views('admin/templates/sidebar');
       $this->views('admin/templates/navbar');
       $this->views('admin/monitoringRuangan/detail', $data);
+      $this->views('admin/templates/footer');
+    }
+
+    public function detailContainer($id)
+    {
+      $data['judul'] = 'Detail Barang Container';
+      $data['container'] = $this->models('Container_model')->getContainerDetailById($id);
+      $data['barang_container'] = $this->models('BarangContainer_model')->getItemsByContainer($id);
+      $data['ruangan'] = $this->models('Ruangan_model')->getRuanganById($data['container']['kode_ruangan']);
+
+      $this->views('admin/templates/header', $data);
+      $this->views('admin/templates/sidebar');
+      $this->views('admin/templates/navbar');
+      $this->views('admin/monitoringRuangan/detailContainer', $data);
       $this->views('admin/templates/footer');
     }
 
@@ -215,12 +236,13 @@
     }
 
     public function simpanUbah() {
+      $kode_ruangan = $_POST['kode_ruangan'];
       if ($this->models('Monitoring_ruangan_model')->ubahDataBarangRuangan($_POST) > 0) {
-        header('Location: ' . BASEURL . 'monitoringRuangan');
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       } else {
         // Even if 0 items (all removed), we might want to redirect
-        header('Location: ' . BASEURL . 'monitoringRuangan');
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       }
     }
@@ -232,9 +254,20 @@
       }
     }
 
+    public function hapusBarang($kode_ruangan, $id_barang) {
+      if ($this->models('Monitoring_ruangan_model')->hapusSatuBarangRuangan($kode_ruangan, $id_barang) >= 0) {
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
+        exit;
+      }
+    }
+
     public function simpan() {
+      $kode_ruangan = $_POST['kode_ruangan'];
       if ($this->models('Monitoring_ruangan_model')->tambahDataBarangRuangan($_POST) > 0) {
-        header('Location: ' . BASEURL . 'monitoringRuangan');
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
+        exit;
+      } else {
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       }
     }

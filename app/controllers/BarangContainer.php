@@ -24,10 +24,17 @@ class BarangContainer extends Controller {
         $this->views('admin/templates/footer');
     }
 
-    public function tambah()
+    public function tambah($preselected_container_id = null)
     {
         $data['judul'] = 'Tambah Barang Container';
         $data['containers'] = $this->models('Container_model')->getAllContainer(); // Master data container
+        
+        // Support both path parameter and query string parameter
+        if (empty($preselected_container_id) && isset($_GET['preselected_container_id'])) {
+            $preselected_container_id = $_GET['preselected_container_id'];
+        }
+        
+        $data['preselected_container_id'] = $preselected_container_id;
         $data['barang'] = $this->models('Barang_model')->getAllBarang(); // All items for selection
         $data['kategori'] = $this->models('Barang_model')->getAllKategori();
         
@@ -54,7 +61,7 @@ class BarangContainer extends Controller {
     public function edit($id)
     {
         $data['judul'] = 'Edit Isi Container';
-        $data['container_info'] = $this->models('Container_model')->getContainerById($id);
+        $data['container_info'] = $this->models('Container_model')->getContainerDetailById($id);
         $data['barang'] = $this->models('Barang_model')->getAllBarang();
         $data['kategori'] = $this->models('Barang_model')->getAllKategori();
         $data['current_items'] = $this->models('BarangContainer_model')->getItemsByContainer($id);
