@@ -30,6 +30,11 @@
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap</label>
                         <input class="w-full h-11 px-4 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-sm text-on-surface placeholder:text-slate-300" placeholder="Contoh: Jhon Doe" type="text" name="nama_lengkap" value="<?= $data['user']['nama_lengkap']; ?>"/>
                     </div>
+
+                    <div class="space-y-2" id="kelas-field">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Kode Kelas</label>
+                        <input id="kode_kelas" class="w-full h-11 px-4 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all outline-none text-sm text-on-surface placeholder:text-slate-300" placeholder="Contoh: 06TPLP029" type="text" name="kode_kelas" value="<?= $data['user']['kode_kelas']; ?>"/>
+                    </div>
                     
                     <div class="grid grid-cols-1 gap-6">
                         <div class="space-y-2">
@@ -53,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" id="ruangan-field">
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Ruangan</label>
                         <div class="relative custom-select-container" id="room-select-container">
                             <div class="relative group">
@@ -209,6 +214,40 @@
                 if (!container.contains(e.target)) {
                     dropdown.classList.add('hidden');
                     arrow.classList.remove('rotate-180');
+                }
+            });
+
+            // Dynamic fields toggle based on selected role
+            const roleSelect = document.getElementById('role');
+            const ruanganField = document.getElementById('ruangan-field');
+            const kelasInput = document.getElementById('kode_kelas');
+
+            function toggleFields() {
+                const role = roleSelect.value;
+                if (role === 'Ketua kelas') {
+                    ruanganField.classList.remove('hidden');
+                    kelasInput.setAttribute('required', 'required');
+                } else {
+                    ruanganField.classList.add('hidden');
+                    kelasInput.removeAttribute('required');
+                    
+                    // Clear room inputs when role is Admin or OB
+                    searchInput.value = 'Tidak ada ruangan';
+                    hiddenInput.value = '';
+                }
+            }
+
+            roleSelect.addEventListener('change', toggleFields);
+            toggleFields(); // Initial execution
+
+            // Require room code specifically for Ketua kelas on submit
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                if (roleSelect.value === 'Ketua kelas') {
+                    if (!hiddenInput.value) {
+                        alert('Bagi Ketua kelas, silakan pilih Ruangan terlebih dahulu!');
+                        e.preventDefault();
+                    }
                 }
             });
         });

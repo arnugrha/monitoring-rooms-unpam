@@ -56,6 +56,14 @@
                 <span class="material-symbols-outlined text-lg">add</span>
                 Tambah Users
               </a>
+              <button onclick="document.getElementById('importModal').classList.remove('hidden')" class="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-lg shadow-emerald-600/20 transition-all">
+                  <span class="material-symbols-outlined text-lg">upload_file</span>
+                  Import
+              </button>
+              <a href="<?= BASEURL; ?>users/export" class="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold shadow-lg shadow-amber-500/20 transition-all">
+                  <span class="material-symbols-outlined text-lg">download</span>
+                  Export
+              </a>
             </div>
           </div>
 
@@ -149,3 +157,27 @@
           </div>
         </div>
       </section>
+
+      <!-- Modal Import -->
+      <div id="importModal" class="fixed inset-0 z-[100] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+              <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                  <h3 class="text-lg font-bold text-on-surface">Import Data Users CSV</h3>
+                  <button onclick="document.getElementById('importModal').classList.add('hidden')" class="text-slate-400 hover:text-error transition-colors">
+                      <span class="material-symbols-outlined">close</span>
+                  </button>
+              </div>
+              <form action="<?= BASEURL; ?>users/importCSV" method="post" enctype="multipart/form-data" class="p-6">
+                  <div class="mb-6 space-y-2">
+                      <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Pilih File CSV</label>
+                      <input type="file" name="file_csv" accept=".csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all outline-none">
+                      <p class="text-[10px] text-slate-400 mt-2 font-medium">Format header: <span class="font-bold text-slate-600">USERNAME, NAMA_LENGKAP, KODE_KELAS, PASSWORD, ROLE, KODE_RUANGAN</span></p>
+                      <p class="text-[10px] text-slate-400 font-medium">Simpan file Excel Anda sebagai CSV sebelum di-upload.</p>
+                  </div>
+                  <div class="flex items-center justify-end gap-3">
+                      <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">Batal</button>
+                      <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg shadow-lg shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all">Upload Data</button>
+                  </div>
+              </form>
+          </div>
+      </div>

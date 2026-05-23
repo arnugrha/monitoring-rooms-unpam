@@ -165,7 +165,8 @@
             $headers = fgetcsv($handle, 4000, ","); // Get header row
             if (!$headers || strcasecmp(trim($headers[0]), 'RUANG') !== 0) {
                 fclose($handle);
-                header('Location: ' . BASEURL . 'monitoringRuangan?error=Format CSV tidak valid');
+                Session::setFlash('error', 'Format CSV tidak valid. Kolom pertama harus RUANG.');
+                header('Location: ' . BASEURL . 'monitoringRuangan');
                 exit;
             }
             
@@ -217,11 +218,13 @@
                 }
             }
             fclose($handle);
-            header('Location: ' . BASEURL . 'monitoringRuangan?success=Data berhasil diimport');
+            Session::setFlash('success', 'Berhasil mengimport data barang ruangan.');
+            header('Location: ' . BASEURL . 'monitoringRuangan');
             exit;
         }
       }
-      header('Location: ' . BASEURL . 'monitoringRuangan?error=Gagal import data');
+      Session::setFlash('error', 'Gagal mengimport data.');
+      header('Location: ' . BASEURL . 'monitoringRuangan');
       exit;
     }
 
@@ -237,11 +240,12 @@
 
     public function simpanUbah() {
       $kode_ruangan = $_POST['kode_ruangan'];
-      if ($this->models('Monitoring_ruangan_model')->ubahDataBarangRuangan($_POST) > 0) {
+      if ($this->models('Monitoring_ruangan_model')->ubahDataBarangRuangan($_POST) >= 0) {
+        Session::setFlash('success', 'Data barang ruangan berhasil diperbarui.');
         header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       } else {
-        // Even if 0 items (all removed), we might want to redirect
+        Session::setFlash('error', 'Gagal memperbarui data barang ruangan.');
         header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       }
@@ -249,6 +253,11 @@
 
     public function hapus($id) {
       if ($this->models('Monitoring_ruangan_model')->hapusDataBarangRuangan($id) >= 0) {
+        Session::setFlash('success', 'Semua data barang di ruangan berhasil dihapus.');
+        header('Location: ' . BASEURL . 'monitoringRuangan');
+        exit;
+      } else {
+        Session::setFlash('error', 'Gagal menghapus data barang ruangan.');
         header('Location: ' . BASEURL . 'monitoringRuangan');
         exit;
       }
@@ -256,6 +265,11 @@
 
     public function hapusBarang($kode_ruangan, $id_barang) {
       if ($this->models('Monitoring_ruangan_model')->hapusSatuBarangRuangan($kode_ruangan, $id_barang) >= 0) {
+        Session::setFlash('success', 'Barang berhasil dihapus dari ruangan.');
+        header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
+        exit;
+      } else {
+        Session::setFlash('error', 'Gagal menghapus barang dari ruangan.');
         header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       }
@@ -264,9 +278,11 @@
     public function simpan() {
       $kode_ruangan = $_POST['kode_ruangan'];
       if ($this->models('Monitoring_ruangan_model')->tambahDataBarangRuangan($_POST) > 0) {
+        Session::setFlash('success', 'Data barang berhasil ditambahkan ke ruangan.');
         header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       } else {
+        Session::setFlash('error', 'Gagal menambahkan data barang.');
         header('Location: ' . BASEURL . 'MonitoringRuangan/detail/' . $kode_ruangan);
         exit;
       }
